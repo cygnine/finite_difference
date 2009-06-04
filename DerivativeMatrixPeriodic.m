@@ -3,7 +3,7 @@
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Wed 03 Jun 2009 08:07:30 PM EDT
+% * Last Modified : Thu 04 Jun 2009 05:09:56 PM EDT
 %
 % * Created By : Akil Narayan
 %
@@ -37,7 +37,7 @@ inds = StencilPeriodicity==-1;
 XInput(inds) = xmin - (xmax - XInput(inds));
 
 % Allocation
-mat = spalloc(n,k+1,n*(k+1));
+mat = spalloc(n,n,n*(k+1));
 
 % This is the really slow, trivial way to do things
 for q = 1:n

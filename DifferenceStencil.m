@@ -3,7 +3,7 @@
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Wed 03 Jun 2009 08:10:00 PM EDT
+% * Last Modified : Thu 04 Jun 2009 06:00:08 PM EDT
 %
 % * Created By : Akil Narayan
 %
@@ -43,54 +43,57 @@ elseif length(varargin)==1
   r = varargin{1};
   periodic = false;
 else
-  r = zeros([n,1]);
+  r = zeros([n,1],'int8');
   periodic = false;
 end
 if length(r)==1
-  r = r*ones([n,1]);
+  r = r*ones([n,1],'int8');
 end
+r = int8(r);
 
 % First let's just create the linear offsets, ignoring boundaries
-stencil = zeros([n,k+1]);
+stencil = zeros([n,k+1],'int8');
 
 % Lots of initial data is needed
 stencil(:,1) = 1:n;
 NegativeK = true([n,1]);
-NegativeCount = zeros([n,1]);
-PositiveCount = zeros([n,1]);
+NegativeCount = zeros([n,1],'int8');
+PositiveCount = zeros([n,1],'int8');
 Rsign = sign(r);
-RMagnitude = abs(r);
-RCount = ones([n,1]);
-RImpose = RCount<=RMagnitude;
+Rmag = abs(r);
+
+% Downgrade r to its maximum values
+if mod(k,2)==0
+  Rmag = min(Rmag,k/2);
+else
+  Rmag = min(Rmag,(k+1)/2);
+  inds = and(Rmag>(k-1)/2, Rsign<0);
+  Rmag(inds) = (k-1)/2;
+end
+r = Rmag.*Rsign;
 
 % There's probably a better way to do this
 for q = 1:k
-  % Impose r-shift:
-  inds = RImpose;
-  stencil(inds,q+1) = stencil(inds,1) + Rsign(inds).*RCount(inds);
-  RCount(inds) = RCount(inds)+1;
-
-  % Update the positive, negative counts to reflect r-shift
-  tempinds = and(inds,Rsign==-1);
-  NegativeCount(tempinds) = NegativeCount(tempinds)+1;
-  tempinds = and(inds,Rsign==1);
-  PositiveCount(tempinds) = PositiveCount(tempinds)+1;
-
   % Do the default left-stencil creation:
-  inds = and(~RImpose,NegativeK);
+  inds = NegativeK;
   stencil(inds,q+1) = stencil(inds,1) -NegativeCount(inds) -1;
   NegativeCount(inds) = NegativeCount(inds) + 1;
 
   % Do the default right-stencil creation:
-  inds = and(~RImpose,~NegativeK);
+  inds = not(NegativeK);
   stencil(inds,q+1) = stencil(inds,1) + PositiveCount(inds)+1;
   PositiveCount(inds) = PositiveCount(inds) + 1;
 
-  % Update NegativeK, RImpose
-  inds = ~RImpose;
-  NegativeK(inds) = not(NegativeK(inds));
-  RImpose = RCount<=RMagnitude;
+  % Update NegativeK 
+  NegativeK = not(NegativeK);
 end
+% Shift by r
+stencil(:,2:(k+1)) = stencil(:,2:(k+1)) + repmat(r,[1,k]);
+% Find which rows have repeated indices
+inds = stencil(:,2:(k+1))==repmat(stencil(:,1),[1,k]);
+
+stencil(:,2:(k+1)) = stencil(:,2:(k+1)) + ...
+         int8(inds).*repmat(r,[1,k]);
 
 % Deal with boundaries: again, very stupid, but it works
 if not(periodic)
