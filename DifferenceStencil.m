@@ -1,9 +1,9 @@
 % MATLAB File : DifferenceStencil.m
-% DifferenceStencil(n,k,{r=0},{periodic=false})
+% [stencil,{StencilPeriodicity}] = DifferenceStencil(n,k,{r=0},{periodic=false})
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Wed 03 Jun 2009 04:22:03 PM EDT
+% * Last Modified : Wed 03 Jun 2009 08:10:00 PM EDT
 %
 % * Created By : Akil Narayan
 %
@@ -25,8 +25,12 @@
 %   The second optional input periodic is a boolean indicating whether the input is
 %   periodic. If it is not, then one-sided stencils are used near the
 %   boundaries.  (Default is false)
+%   If the periodicity flag is set to true, then the output StencilPeriodicity
+%   is a size(stencil) int8 array with values 0, \pm 1. +1 indicates that the
+%   nodal index had a value greater than n and was wrapped down, and -1
+%   indicates that the nodal index had a value less than 1 and was wrapped up. 
 
-function[stencil] = DifferenceStencil(n,k,varargin)
+function[stencil,varargout] = DifferenceStencil(n,k,varargin)
 
 % Input data parsing
 if length(varargin)==2
@@ -37,13 +41,13 @@ if length(varargin)==2
   end
 elseif length(varargin)==1
   r = varargin{1};
-  if length(r)==1
-    r = r*ones([n,1]);
-  end
   periodic = false;
 else
   r = zeros([n,1]);
   periodic = false;
+end
+if length(r)==1
+  r = r*ones([n,1]);
 end
 
 % First let's just create the linear offsets, ignoring boundaries
@@ -119,5 +123,10 @@ if not(periodic)
   end
 
 else  % Periodic case is *much* easier
+  StencilPeriodicity = zeros([n,k+1],'int8');
+  StencilPeriodicity(stencil>n) = +1;
+  StencilPeriodicity(stencil<1) = -1;
+  varargout{1} = StencilPeriodicity;
+
   stencil = mod(stencil-1,n)+1;
 end
