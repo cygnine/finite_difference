@@ -3,7 +3,7 @@
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Wed 03 Jun 2009 08:03:25 PM EDT
+% * Last Modified : Fri 05 Jun 2009 09:44:06 PM EDT
 %
 % * Created By : Akil Narayan
 %
@@ -16,6 +16,9 @@
 %   and has the same meaning as in that function. 
 
 function[d] = DifferenceDerivativePeriodic(x,y,k,interval,varargin)
+
+global common;
+prevpath = addpaths(common.bases.d1.newton.base);
 
 xmin = interval(1); xmax = interval(2);
 
@@ -44,3 +47,5 @@ dd = DividedDifference(XInput.',y(stencil.'));
 
 % Differentiate and evaluate the interpolants
 d = NewtonDiffEval(XInput.',dd).';
+
+path(prevpath);

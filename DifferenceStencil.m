@@ -3,7 +3,7 @@
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Thu 04 Jun 2009 06:00:08 PM EDT
+% * Last Modified : Sat 06 Jun 2009 03:27:35 PM EDT
 %
 % * Created By : Akil Narayan
 %
@@ -26,7 +26,7 @@
 %   periodic. If it is not, then one-sided stencils are used near the
 %   boundaries.  (Default is false)
 %   If the periodicity flag is set to true, then the output StencilPeriodicity
-%   is a size(stencil) int8 array with values 0, \pm 1. +1 indicates that the
+%   is a size(stencil) int32 array with values 0, \pm 1. +1 indicates that the
 %   nodal index had a value greater than n and was wrapped down, and -1
 %   indicates that the nodal index had a value less than 1 and was wrapped up. 
 
@@ -43,22 +43,22 @@ elseif length(varargin)==1
   r = varargin{1};
   periodic = false;
 else
-  r = zeros([n,1],'int8');
+  r = zeros([n,1],'int32');
   periodic = false;
 end
 if length(r)==1
-  r = r*ones([n,1],'int8');
+  r = r*ones([n,1],'int32');
 end
-r = int8(r);
+r = int32(r);
 
 % First let's just create the linear offsets, ignoring boundaries
-stencil = zeros([n,k+1],'int8');
+stencil = zeros([n,k+1],'int32');
 
 % Lots of initial data is needed
 stencil(:,1) = 1:n;
 NegativeK = true([n,1]);
-NegativeCount = zeros([n,1],'int8');
-PositiveCount = zeros([n,1],'int8');
+NegativeCount = zeros([n,1],'int32');
+PositiveCount = zeros([n,1],'int32');
 Rsign = sign(r);
 Rmag = abs(r);
 
@@ -93,7 +93,7 @@ stencil(:,2:(k+1)) = stencil(:,2:(k+1)) + repmat(r,[1,k]);
 inds = stencil(:,2:(k+1))==repmat(stencil(:,1),[1,k]);
 
 stencil(:,2:(k+1)) = stencil(:,2:(k+1)) + ...
-         int8(inds).*repmat(r,[1,k]);
+         int32(inds).*repmat(r,[1,k]);
 
 % Deal with boundaries: again, very stupid, but it works
 if not(periodic)
@@ -126,7 +126,7 @@ if not(periodic)
   end
 
 else  % Periodic case is *much* easier
-  StencilPeriodicity = zeros([n,k+1],'int8');
+  StencilPeriodicity = zeros([n,k+1],'int32');
   StencilPeriodicity(stencil>n) = +1;
   StencilPeriodicity(stencil<1) = -1;
   varargout{1} = StencilPeriodicity;

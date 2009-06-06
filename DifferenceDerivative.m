@@ -3,7 +3,7 @@
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Wed 03 Jun 2009 07:45:51 PM EDT
+% * Last Modified : Fri 05 Jun 2009 09:47:32 PM EDT
 %
 % * Created By : Akil Narayan
 %
@@ -16,6 +16,9 @@
 
 function[d] = DifferenceDerivative(x,y,k,varargin)
 
+global common;
+prevpath = addpaths(common.bases.d1.newton.base);
+
 % Create stencil
 n = length(x);
 [stencil] = DifferenceStencil(n,k,varargin{:});
@@ -25,3 +28,5 @@ dd = DividedDifference(x(stencil).',y(stencil.'));
 
 % Differentiate and evaluate the interpolants
 d = NewtonDiffEval(x(stencil).',dd).';
+
+path(prevpath);

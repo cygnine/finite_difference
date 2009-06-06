@@ -3,7 +3,7 @@
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Wed 03 Jun 2009 04:47:38 PM EDT
+% * Last Modified : Fri 05 Jun 2009 09:48:40 PM EDT
 %
 % * Created By : Akil Narayan
 %
@@ -13,6 +13,9 @@
 %   purpose as in DifferenceStencil, where they are explained. 
 
 function[mat] = DerivativeMatrix(x,k,varargin);
+
+global common;
+prevpath = addpaths(common.bases.d1.newton.base);
 
 % Create stencil
 n = length(x);
@@ -31,3 +34,5 @@ for q = 1:n
   % Differentiate and evaluate the interpolants
   mat(:,q) = sparse(NewtonDiffEval(x(stencil).',dd).');
 end
+
+path(prevpath);

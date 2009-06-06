@@ -3,7 +3,7 @@
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Thu 04 Jun 2009 05:09:56 PM EDT
+% * Last Modified : Sat 06 Jun 2009 03:17:52 PM EDT
 %
 % * Created By : Akil Narayan
 %
@@ -13,6 +13,9 @@
 %   the same purpose as in DifferenceStencil, where it is explained. 
 
 function[mat] = DerivativeMatrixPeriodic(x,k,interval,varargin);
+
+global common;
+prevpath = addpaths(common.bases.d1.newton.base);
 
 xmin = interval(1); xmax = interval(2);
 
@@ -50,3 +53,5 @@ for q = 1:n
   % Differentiate and evaluate the interpolants
   mat(:,q) = sparse(NewtonDiffEval(XInput.',dd).');
 end
+
+path(prevpath);
