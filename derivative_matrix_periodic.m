@@ -1,18 +1,18 @@
-% MATLAB File : DerivativeMatrixPeriodic.m
-% [mat] = DerivativeMatrixPeriodic(x,k,interval,{r})
+% MATLAB File : derivative_matrix_periodic.m
+% [mat] = derivative_matrix_periodic(x,k,interval,varargin);
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Sat 06 Jun 2009 03:17:52 PM EDT
+% * Last Modified : Fri 12 Jun 2009 03:14:02 PM EDT
 %
 % * Created By : Akil Narayan
 %
 % * Purpose : Creates a sparse finite-difference matrix of order k on the 1D
 %   mesh defined by the nodal locations x with periodic continuation over the
 %   interval specified by interval. The optional input r is the shift and serves
-%   the same purpose as in DifferenceStencil, where it is explained. 
+%   the same purpose as in difference_stencil, where it is explained. 
 
-function[mat] = DerivativeMatrixPeriodic(x,k,interval,varargin);
+function[mat] = derivative_matrix_periodic(x,k,interval,varargin);
 
 global common;
 prevpath = addpaths(common.bases.d1.newton.base);
@@ -22,20 +22,20 @@ xmin = interval(1); xmax = interval(2);
 % Create stencil
 n = length(x);
 if isempty(varargin)
-  [stencil,StencilPeriodicity] = ...
-                  DifferenceStencil(n,k,[],true);
+  [stencil,stencil_periodicity] = ...
+                  difference_stencil(n,k,[],true);
 else
-  [stencil,StencilPeriodicity] = ...
-                  DifferenceStencil(n,k,varargin{1},true);
+  [stencil,stencil_periodicity] = ...
+                  difference_stencil(n,k,varargin{1},true);
 end
 
 % Compute x values
 XInput = x(stencil);
-inds = StencilPeriodicity==1;
+inds = stencil_periodicity==1;
 % For indices that wrap down to 1:
 XInput(inds) = xmax + (XInput(inds) - xmin);
 
-inds = StencilPeriodicity==-1;
+inds = stencil_periodicity==-1;
 % For indices that wrap up to n:
 XInput(inds) = xmin - (xmax - XInput(inds));
 
@@ -48,10 +48,10 @@ for q = 1:n
   y(q) = 1;
 
   % Use stencil to compute interpolants
-  dd = DividedDifference(XInput.',y(stencil.'));
+  dd = divided_difference(XInput.',y(stencil.'));
 
   % Differentiate and evaluate the interpolants
-  mat(:,q) = sparse(NewtonDiffEval(XInput.',dd).');
+  mat(:,q) = sparse(newton_derivative_evaluate(XInput.',dd).');
 end
 
 path(prevpath);

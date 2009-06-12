@@ -1,9 +1,9 @@
-% MATLAB File : DifferenceStencil.m
-% [stencil,{StencilPeriodicity}] = DifferenceStencil(n,k,{r=0},{periodic=false})
+% MATLAB File : difference_stencil.m
+% [stencil,{stencil_periodicity}] = difference_stencil(n,k,{r=0,periodic=false})
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Sat 06 Jun 2009 03:27:35 PM EDT
+% * Last Modified : Fri 12 Jun 2009 03:18:36 PM EDT
 %
 % * Created By : Akil Narayan
 %
@@ -30,7 +30,7 @@
 %   nodal index had a value greater than n and was wrapped down, and -1
 %   indicates that the nodal index had a value less than 1 and was wrapped up. 
 
-function[stencil,varargout] = DifferenceStencil(n,k,varargin)
+function[stencil,varargout] = difference_stencil(n,k,varargin)
 
 % Input data parsing
 if length(varargin)==2
@@ -126,10 +126,10 @@ if not(periodic)
   end
 
 else  % Periodic case is *much* easier
-  StencilPeriodicity = zeros([n,k+1],'int32');
-  StencilPeriodicity(stencil>n) = +1;
-  StencilPeriodicity(stencil<1) = -1;
-  varargout{1} = StencilPeriodicity;
+  stencil_periodicity = zeros([n,k+1],'int32');
+  stencil_periodicity(stencil>n) = +1;
+  stencil_periodicity(stencil<1) = -1;
+  varargout{1} = stencil_periodicity;
 
   stencil = mod(stencil-1,n)+1;
 end

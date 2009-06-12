@@ -1,25 +1,25 @@
-% MATLAB File : DerivativeMatrix.m
-% DerivativeMatrix(x,k,{r},{periodic})
+% MATLAB File : derivative_matrix.m
+% [mat] = derivative_matrix(x,k,varargin);
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Fri 05 Jun 2009 09:48:40 PM EDT
+% * Last Modified : Fri 12 Jun 2009 03:12:17 PM EDT
 %
 % * Created By : Akil Narayan
 %
 % * Purpose : Creates a sparse finite-difference matrix of order k on the 1D
 %   mesh defined by the nodal locations x. The optional inputs r and periodic
 %   are the shift and periodicity flags, respectively, and serve the same
-%   purpose as in DifferenceStencil, where they are explained. 
+%   purpose as in difference_stencil, where they are explained. 
 
-function[mat] = DerivativeMatrix(x,k,varargin);
+function[mat] = derivative_matrix(x,k,varargin);
 
 global common;
 prevpath = addpaths(common.bases.d1.newton.base);
 
 % Create stencil
 n = length(x);
-stencil = DifferenceStencil(n,k,varargin{:});
+stencil = difference_stencil(n,k,varargin{:});
 
 mat = spalloc(n,k+1,n*(k+1));
 
@@ -29,10 +29,10 @@ for q = 1:n
   y(q) = 1;
 
   % Use stencil to compute interpolants
-  dd = DividedDifference(x(stencil).',y(stencil.'));
+  dd = divided_difference(x(stencil).',y(stencil.'));
 
   % Differentiate and evaluate the interpolants
-  mat(:,q) = sparse(NewtonDiffEval(x(stencil).',dd).');
+  mat(:,q) = sparse(newton_derivative_eval(x(stencil).',dd).');
 end
 
 path(prevpath);

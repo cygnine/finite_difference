@@ -1,9 +1,9 @@
-% MATLAB File : DifferenceDerivative.m
-% [d] = DifferenceDerivative(x,y,k,{r=0})
+% MATLAB File : difference_derivative.m
+% [d] = difference_derivative(x,y,k,varargin)
 %
 % * Creation Date : 2009-06-03
 %
-% * Last Modified : Fri 05 Jun 2009 09:47:32 PM EDT
+% * Last Modified : Fri 12 Jun 2009 03:15:24 PM EDT
 %
 % * Created By : Akil Narayan
 %
@@ -11,22 +11,22 @@
 %   on the unstructured nodal inputs (x,y). The output satisfies size(d) =
 %   size(x).
 %
-%   The two optional inputs r and periodic are fed right into DifferenceStencil
+%   The two optional inputs r and periodic are fed right into difference_stencil
 %   and have the same meaning as in that function. 
 
-function[d] = DifferenceDerivative(x,y,k,varargin)
+function[d] = difference_derivative(x,y,k,varargin)
 
 global common;
 prevpath = addpaths(common.bases.d1.newton.base);
 
 % Create stencil
 n = length(x);
-[stencil] = DifferenceStencil(n,k,varargin{:});
+[stencil] = difference_stencil(n,k,varargin{:});
 
 % Use stencil to compute interpolants
-dd = DividedDifference(x(stencil).',y(stencil.'));
+dd = divided_difference(x(stencil).',y(stencil.'));
 
 % Differentiate and evaluate the interpolants
-d = NewtonDiffEval(x(stencil).',dd).';
+d = newton_derivative_evaluate(x(stencil).',dd).';
 
 path(prevpath);
