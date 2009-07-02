@@ -1,21 +1,14 @@
-% MATLAB File : derivative_matrix_periodic.m
-% [mat] = derivative_matrix_periodic(x,k,interval,varargin);
-%
-% * Creation Date : 2009-06-03
-%
-% * Last Modified : Fri 12 Jun 2009 03:14:02 PM EDT
-%
-% * Created By : Akil Narayan
-%
-% * Purpose : Creates a sparse finite-difference matrix of order k on the 1D
-%   mesh defined by the nodal locations x with periodic continuation over the
-%   interval specified by interval. The optional input r is the shift and serves
-%   the same purpose as in difference_stencil, where it is explained. 
-
 function[mat] = derivative_matrix_periodic(x,k,interval,varargin);
+% [MAT] = DERIVATIVE_MATRIX_PERIODIC(X,K,INTERVAL,VARARGIN);
+%
+%     Creates a sparse finite-difference matrix of order k on the 1D mesh
+%     defined by the nodal locations x with periodic continuation over the
+%     interval specified by interval. The optional input r is the shift and
+%     serves the same purpose as in difference_stencil, where it is explained. 
 
-global common;
-prevpath = addpaths(common.bases.d1.newton.base);
+global handles;
+newton = handles.bases.NewtonPolynomials;
+fd = handles.FiniteDifference;
 
 xmin = interval(1); xmax = interval(2);
 
@@ -23,10 +16,10 @@ xmin = interval(1); xmax = interval(2);
 n = length(x);
 if isempty(varargin)
   [stencil,stencil_periodicity] = ...
-                  difference_stencil(n,k,[],true);
+                  fd.difference_stencil(n,k,'periodic',true);
 else
   [stencil,stencil_periodicity] = ...
-                  difference_stencil(n,k,varargin{1},true);
+                  fd.difference_stencil(n,k,'r',varargin{1},'periodic',true);
 end
 
 % Compute x values
@@ -48,10 +41,8 @@ for q = 1:n
   y(q) = 1;
 
   % Use stencil to compute interpolants
-  dd = divided_difference(XInput.',y(stencil.'));
+  dd = newton.divided_difference(XInput.',y(stencil.'));
 
   % Differentiate and evaluate the interpolants
-  mat(:,q) = sparse(newton_derivative_evaluate(XInput.',dd).');
+  mat(:,q) = sparse(newton.newton_derivative_evaluate(XInput.',dd).');
 end
-
-path(prevpath);
