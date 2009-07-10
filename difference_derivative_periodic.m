@@ -1,24 +1,17 @@
-% MATLAB File : difference_derivative_periodic.m
-% [d] = difference_derivative_periodic(x,y,k,interval,varargin)
-%
-% * Creation Date : 2009-06-03
-%
-% * Last Modified : Fri 12 Jun 2009 03:17:01 PM EDT
-%
-% * Created By : Akil Narayan
-%
-% * Purpose : Computes the k'th order finite difference derivative approximation
-%   on the unstructured nodal inputs (x,y). Because periodicity is assumed here,
-%   we need the input interval, a 2-vector specifying the interval of
-%   approximation. The output satisfies size(d) = size(x). 
-%
-%   The optional input r is fed right into difference_stencil and has the same
-%   meaning as in that function. 
-
 function[d] = difference_derivative_periodic(x,y,k,interval,varargin)
+% [D] = DIFFERENCE_DERIVATIVE_PERIODIC(X,Y,K,INTERVAL,{R=0})
+%
+%     Computes the K'th order finite difference derivative approximation on the
+%     unstructured nodal inputs (X,Y). Because periodicity is assumed here, we
+%     need the input interval, a 2-vector specifying the interval of
+%     approximation. The output satisfies size(d) = size(x). 
+%
+%     The optional input R is fed right into difference_stencil and has the same
+%     meaning as in that function. 
 
-global common;
-prevpath = addpaths(common.bases.d1.newton.base);
+global handles;
+newton = handles.speclab.NewtonPolynomials;
+fd = handles.FiniteDifference;
 
 xmin = interval(1); xmax = interval(2);
 
@@ -26,10 +19,10 @@ xmin = interval(1); xmax = interval(2);
 n = length(x);
 if isempty(varargin)
   [stencil,stencil_periodicity] = ...
-                  difference_stencil(n,k,[],true);
+                  fd.difference_stencil(n,k,'periodic',true);
 else
   [stencil,stencil_periodicity] = ...
-                  difference_stencil(n,k,varargin{1},true);
+                  fd.difference_stencil(n,k,'r',varargin{1},'periodic',true);
 end
 
 % Compute x values
@@ -43,9 +36,7 @@ inds = stencil_periodicity==-1;
 XInput(inds) = xmin - (xmax - XInput(inds));
 
 % Use stencil to compute interpolants
-dd = divided_difference(XInput.',y(stencil.'));
+dd = newton.divided_difference(XInput.',y(stencil.'));
 
 % Differentiate and evaluate the interpolants
-d = newton_derivative_evaluate(XInput.',dd).';
-
-path(prevpath);
+d = newton.newton_derivative_evaluate(XInput.',dd).';

@@ -1,23 +1,23 @@
 function[stencil,varargout] = difference_stencil(n,k,varargin)
-% [STENCIL,VARARGOUT] = DIFFERENCE_STENCIL(N,K,{R,PERIODIC})
+% [STENCIL,{STENCILPERIODICITY}] = DIFFERENCE_STENCIL(N,K,{R=0,PERIODIC=false})
 %
 %     Creates indices corresponding to the `default' finite-difference stencil.
-%     The order k must be greater than or equal to 0 and indicates the
-%     polynomial order of approximation. The output is an n x (k+1) stencil
+%     The order K must be greater than or equal to 0 and indicates the
+%     polynomial order of approximation. The output is an n x (K+1) stencil
 %     matrix containing indices of an n-vector over which the difference
-%     approximation is taken. Assumes that the external n-vector is ordered.
+%     approximation is taken. Assumes that the external N-vector is ordered.
 %     
 %     If no additional inputs are given, this uses a central difference stencil
-%     with a preference to the left in the case of odd k.
+%     with a preference to the left in the case of odd K.
 % 
-%     The first optional input r (length n) indicates the index offset from the
-%     central stencil. r cannot be so large that it removes the point of
+%     The first optional input R (length N) indicates the index offset from the
+%     central stencil. R cannot be so large that it removes the point of
 %     differentiation from the stencil. An error is not raised in this case, but
 %     the resulting stencil is moved so that it intersects with the point of
 %     differentiation.
 %  
-%     The second optional input periodic is a boolean indicating whether the
-%     input is periodic. If it is not, then one-sided stencils are used near the
+%     The second optional input PERIODIC is a boolean indicating whether the
+%     input is PERIODIC. If it is not, then one-sided stencils are used near the
 %     boundaries.  (Default is false) If the periodicity flag is set to true,
 %     then the output StencilPeriodicity is a size(stencil) int32 array with
 %     values 0, \pm 1. +1 indicates that the nodal index had a value greater
@@ -30,26 +30,8 @@ global handles;
 opt = handles.common.InputSchema({'r','periodic'},...
           {zeros([n,1]),false},[],varargin{:});
 
-r = opt.r;
+r = int32(opt.r);
 periodic = opt.periodic;
-
-%if length(varargin)==2
-%  periodic = varargin{2};
-%  r = varargin{1};
-%  if isempty(r)
-%    r = zeros([n,1]);
-%  end
-%elseif length(varargin)==1
-%  r = varargin{1};
-%  periodic = false;
-%else
-%  r = zeros([n,1],'int32');
-%  periodic = false;
-%end
-%if length(r)==1
-%  r = r*ones([n,1],'int32');
-%end
-r = int32(r);
 
 % First let's just create the linear offsets, ignoring boundaries
 stencil = zeros([n,k+1],'int32');
