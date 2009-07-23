@@ -106,6 +106,7 @@ if not(periodic)
       ColCount = ColCount + 1;
     end
   end
+  varargout{1} = false;
 
 else  % Periodic case is *much* easier
   stencil_periodicity = zeros([n,k+1],'int32');
