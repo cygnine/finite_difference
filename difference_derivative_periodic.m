@@ -10,7 +10,7 @@ function[d] = difference_derivative_periodic(x,y,k,interval,varargin)
 %     meaning as in that function. 
 
 global handles;
-newton = handles.speclab.NewtonPolynomials;
+newton = handles.speclab.newton_polynomials;
 fd = handles.finite_difference;
 
 xmin = interval(1); xmax = interval(2);

@@ -7,7 +7,7 @@ function[mat] = derivative_matrix(x,k,varargin);
 %     purpose as in difference_stencil, where they are explained. 
 
 global handles;
-newton = handles.speclab.NewtonPolynomials;
+newton = handles.speclab.newton_polynomials;
 fd = handles.finite_difference;
 
 % Create stencil
