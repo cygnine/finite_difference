@@ -10,7 +10,7 @@ function[d] = difference_derivative(x,y,k,varargin)
 
 global handles;
 newton = handles.speclab.NewtonPolynomials;
-fd = handles.FiniteDifference;
+fd = handles.finite_difference;
 
 % Create stencil
 n = length(x);

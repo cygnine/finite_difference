@@ -11,7 +11,7 @@ function[d] = difference_derivative_periodic(x,y,k,interval,varargin)
 
 global handles;
 newton = handles.speclab.NewtonPolynomials;
-fd = handles.FiniteDifference;
+fd = handles.finite_difference;
 
 xmin = interval(1); xmax = interval(2);
 
