@@ -1,11 +1,13 @@
 function[d] = difference_derivative(x,y,k,varargin)
-% [D] = DIFFERENCE_DERIVATIVE(X,Y,K,{R=0,PERIODIC=false})
+% difference_derivative -- finite-difference derivative
+%
+% [d] = difference_derivative(x,y,k,{r=0,periodic=false})
 %
 %   Computes the K'th order finite difference derivative approximation
-%   on the unstructured nodal inputs (X,Y). The output satisfies size(D) =
-%   size(X).
+%   on the unstructured nodal inputs (x,y). The output satisfies size(d) =
+%   size(x).
 %
-%   The two optional inputs R and PERIODIC are fed right into difference_stencil
+%   The two optional inputs r and periodic are fed right into difference_stencil
 %   and have the same meaning as in that function. 
 
 global handles;

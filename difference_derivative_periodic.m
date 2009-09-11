@@ -1,12 +1,14 @@
 function[d] = difference_derivative_periodic(x,y,k,interval,varargin)
-% [D] = DIFFERENCE_DERIVATIVE_PERIODIC(X,Y,K,INTERVAL,{R=0})
+% difference_derivative_periodic -- periodic finite-difference derivative
 %
-%     Computes the K'th order finite difference derivative approximation on the
-%     unstructured nodal inputs (X,Y). Because periodicity is assumed here, we
+% [d] = difference_derivative_periodic(x,y,k,interval,{r=0})
+%
+%     Computes the k'th order finite difference derivative approximation on the
+%     unstructured nodal inputs (x,y). Because periodicity is assumed here, we
 %     need the input interval, a 2-vector specifying the interval of
 %     approximation. The output satisfies size(d) = size(x). 
 %
-%     The optional input R is fed right into difference_stencil and has the same
+%     The optional input r is fed right into difference_stencil and has the same
 %     meaning as in that function. 
 
 global handles;

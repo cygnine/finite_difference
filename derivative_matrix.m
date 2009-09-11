@@ -1,8 +1,10 @@
 function[mat] = derivative_matrix(x,k,varargin);
-% [MAT] = DERIVATIVE_MATRIX(X,K,{R=0,PERIODIC=False});
+% derivative_matrix -- finite-difference derivative matrix
+%
+% [mat] = derivative_matrix(x,k,{r=0,periodic=false});
 %
 %     Creates a sparse finite-difference matrix of order k on the 1D
-%     mesh defined by the nodal locations x. The optional inputs R and PERIODIC
+%     mesh defined by the nodal locations x. The optional inputs r and periodic
 %     are the shift and periodicity flags, respectively, and serve the same
 %     purpose as in difference_stencil, where they are explained. 
 

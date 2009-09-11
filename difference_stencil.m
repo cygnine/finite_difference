@@ -1,25 +1,27 @@
 function[stencil,varargout] = difference_stencil(n,k,varargin)
-% [STENCIL,{STENCILPERIODICITY}] = DIFFERENCE_STENCIL(N,K,{R=0,PERIODIC=false})
+% difference_stencil -- finite-difference stencil
+%
+% [stencil,{stencil_periodicity}] = difference_stencil(n,k,{r=0,periodic=false})
 %
 %     Creates indices corresponding to the `default' finite-difference stencil.
-%     The order K must be greater than or equal to 0 and indicates the
-%     polynomial order of approximation. The output is an n x (K+1) stencil
+%     The order k must be greater than or equal to 0 and indicates the
+%     polynomial order of approximation. The output is an n x (k+1) stencil
 %     matrix containing indices of an n-vector over which the difference
-%     approximation is taken. Assumes that the external N-vector is ordered.
+%     approximation is taken. Assumes that the external n-vector is ordered.
 %     
 %     If no additional inputs are given, this uses a central difference stencil
-%     with a preference to the left in the case of odd K.
+%     with a preference to the left in the case of odd k.
 % 
-%     The first optional input R (length N) indicates the index offset from the
-%     central stencil. R cannot be so large that it removes the point of
+%     The first optional input r (length n) indicates the index offset from the
+%     central stencil. r cannot be so large that it removes the point of
 %     differentiation from the stencil. An error is not raised in this case, but
 %     the resulting stencil is moved so that it intersects with the point of
 %     differentiation.
 %  
-%     The second optional input PERIODIC is a boolean indicating whether the
-%     input is PERIODIC. If it is not, then one-sided stencils are used near the
+%     The second optional input periodic is a boolean indicating whether the
+%     input is periodic. If it is not, then one-sided stencils are used near the
 %     boundaries.  (Default is false) If the periodicity flag is set to true,
-%     then the output StencilPeriodicity is a size(stencil) int32 array with
+%     then the output stencil_periodicity is a size(stencil) int32 array with
 %     values 0, \pm 1. +1 indicates that the nodal index had a value greater
 %     than n and was wrapped down, and -1 indicates that the nodal index had a
 %     value less than 1 and was wrapped up. 
@@ -106,13 +108,12 @@ if not(periodic)
       ColCount = ColCount + 1;
     end
   end
-  varargout{1} = false;
+  stencil_periodicity = false;
 
 else  % Periodic case is *much* easier
   stencil_periodicity = zeros([n,k+1],'int32');
   stencil_periodicity(stencil>n) = +1;
   stencil_periodicity(stencil<1) = -1;
-  varargout{1} = stencil_periodicity;
 
   stencil = mod(stencil-1,n)+1;
 end
