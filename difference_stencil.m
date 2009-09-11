@@ -27,7 +27,7 @@ function[stencil,varargout] = difference_stencil(n,k,varargin)
 % Input data parsing
 global handles;
 
-opt = handles.common.InputSchema({'r','periodic'},...
+opt = handles.common.input_schema({'r','periodic'},...
           {zeros([n,1]),false},[],varargin{:});
 
 r = int32(opt.r);
