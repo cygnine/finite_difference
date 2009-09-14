@@ -29,4 +29,3 @@ for q = 1:n
   % Differentiate and evaluate the interpolants
   mat(:,q) = sparse(newton.newton_derivative_evaluate(x(stencil).',dd).');
 end
-

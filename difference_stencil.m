@@ -1,5 +1,5 @@
-function[stencil,varargout] = difference_stencil(n,k,varargin)
-% difference_stencil -- finite-difference stencil
+function[stencil,stencil_periodicity] = difference_stencil(n,k,varargin)
+% difference_stencil -- formation of finite-difference stencil
 %
 % [stencil,{stencil_periodicity}] = difference_stencil(n,k,{r=0,periodic=false})
 %
