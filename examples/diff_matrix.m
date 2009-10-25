@@ -5,8 +5,8 @@
 % poly_differentiation in the piecewise_polynomial module.
 
 clear; close all;
-global handles;
-fd = handles.finite_difference;
+global packages;
+fd = packages.finite_difference;
 
 % Function to differentiate
 f = @(x) exp(sin(x));

@@ -10,9 +10,9 @@ function[d] = difference_derivative(x,y,k,varargin)
 %   The two optional inputs r and periodic are fed right into difference_stencil
 %   and have the same meaning as in that function. 
 
-global handles;
-newton = handles.speclab.newton_polynomials;
-fd = handles.finite_difference;
+global packages;
+newton = packages.speclab.newton_polynomials;
+fd = packages.finite_difference;
 
 % Create stencil
 n = length(x);

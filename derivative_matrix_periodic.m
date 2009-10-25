@@ -8,9 +8,9 @@ function[mat] = derivative_matrix_periodic(x,k,interval,varargin);
 %     interval specified by interval. The optional input r is the shift and
 %     serves the same purpose as in difference_stencil, where it is explained. 
 
-global handles;
-newton = handles.speclab.newton_polynomials;
-fd = handles.finite_difference;
+global packages;
+newton = packages.speclab.newton_polynomials;
+fd = packages.finite_difference;
 
 xmin = interval(1); xmax = interval(2);
 

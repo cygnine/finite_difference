@@ -11,9 +11,9 @@ function[d] = difference_derivative_periodic(x,y,k,interval,varargin)
 %     The optional input r is fed right into difference_stencil and has the same
 %     meaning as in that function. 
 
-global handles;
-newton = handles.speclab.newton_polynomials;
-fd = handles.finite_difference;
+global packages;
+newton = packages.speclab.newton_polynomials;
+fd = packages.finite_difference;
 
 xmin = interval(1); xmax = interval(2);
 

@@ -27,9 +27,9 @@ function[stencil,stencil_periodicity] = difference_stencil(n,k,varargin)
 %     value less than 1 and was wrapped up. 
 
 % Input data parsing
-global handles;
+global packages;
 
-opt = handles.common.input_schema({'r','periodic'},...
+opt = packages.labtools.input_schema({'r','periodic'},...
           {zeros([n,1]),false},[],varargin{:});
 
 r = int32(opt.r);

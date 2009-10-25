@@ -8,9 +8,9 @@ function[mat] = derivative_matrix(x,k,varargin);
 %     are the shift and periodicity flags, respectively, and serve the same
 %     purpose as in difference_stencil, where they are explained. 
 
-global handles;
-newton = handles.speclab.newton_polynomials;
-fd = handles.finite_difference;
+global packages;
+newton = packages.speclab.newton_polynomials;
+fd = packages.finite_difference;
 
 % Create stencil
 n = length(x);
