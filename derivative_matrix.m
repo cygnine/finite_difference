@@ -8,13 +8,15 @@ function[mat] = derivative_matrix(x,k,varargin);
 %     are the shift and periodicity flags, respectively, and serve the same
 %     purpose as in difference_stencil, where they are explained. 
 
-global packages;
-newton = packages.speclab.newton_polynomials;
-fd = packages.finite_difference;
+persistent difference_stencil divided_difference newton_derivative_evaluate
+if isempty(difference_stencil)
+  from finite_difference import difference_stencil
+  from speclab.newton_polynomials import divided_difference newton_derivative_evaluate
+end
 
 % Create stencil
 n = length(x);
-stencil = fd.difference_stencil(n,k,varargin{:});
+stencil = difference_stencil(n,k,varargin{:});
 
 mat = spalloc(n,k+1,n*(k+1));
 
@@ -24,8 +26,8 @@ for q = 1:n
   y(q) = 1;
 
   % Use stencil to compute interpolants
-  dd = newton.divided_difference(x(stencil).',y(stencil.'));
+  dd = divided_difference(x(stencil).',y(stencil.'));
 
   % Differentiate and evaluate the interpolants
-  mat(:,q) = sparse(newton.newton_derivative_evaluate(x(stencil).',dd).');
+  mat(:,q) = sparse(newton_derivative_evaluate(x(stencil).',dd).');
 end
